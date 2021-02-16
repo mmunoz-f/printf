@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   p_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/12 15:34:07 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/16 18:28:37 by mmunoz-f         ###   ########.fr       */
+/*   Created: 2021/02/16 18:13:30 by mmunoz-f          #+#    #+#             */
+/*   Updated: 2021/02/16 18:25:34 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "ft_printf.h"
 
-# include <stdarg.h>
-# include <stdio.h>
-# include "libft/libft.h"
-
-/* El array guarda [flags, width, precision, length]*/
-typedef struct	s_format
+int	p_addchr(char **s, char c)
 {
-	char	*flags[4];
-	char	specifier;
-}				t_format;
+	char	new[2];
+	char	*temp;
 
-int		ft_printf(const char *, ...);
-
-int		p_addchr(char **s, char c);
-
-#endif
+	new[0] = c;
+	new[1] = 0;
+	temp = *s;
+	if (!(*s = ft_strjoin(*s, new)))
+		return (0);
+	free(temp);
+	return (1);
+}
