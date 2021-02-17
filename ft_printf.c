@@ -6,14 +6,14 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 15:32:02 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/16 18:50:05 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/17 12:29:58 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft/libft.h"
 
-t_format	*init_format()
+t_format	*init_format(void)
 {
 	t_format		*format;
 	unsigned int	i;
@@ -53,12 +53,12 @@ int			fill_flag(char *fmt, char **flag)
 	return (count);
 }
 
-t_format	*setformat(char *fmt, va_list ap)// 26 lineas
+t_format	*setformat(char *fmt)
 {
 	t_format		*format;
 	int				i;
 
-	if (!(format = init_format()))
+	if (!(format = init_format()))//Puedes intentar quitar el return 0 en este caso y proteger las funciones que emplean format(con proteger la primera bastaria)
 		return (0);
 	i = 0;
 	while (!ft_strchr("cspdiuxX%", *fmt) && *fmt)
@@ -83,7 +83,7 @@ t_format	*setformat(char *fmt, va_list ap)// 26 lineas
 	return (format);
 }
 
-int			ft_printf(const char *fmt, ...)//18 lines
+int			ft_printf(const char *fmt, ...)
 {
 	va_list			ap;
 	va_list			ap_copy;
@@ -97,7 +97,10 @@ int			ft_printf(const char *fmt, ...)//18 lines
 	{
 		//Detecta siempre los %, no esta implementado que sean escapados
 		if (*fmt == '%')
-			format = setformat(fmt, ap_copy);
+		{
+			format = setformat(fmt);
+			count += ft_putformat(format, ap_copy);
+		}
 		ft_putchar_fd(*fmt, 1);
 		count++;
 		fmt++;
