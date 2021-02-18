@@ -6,7 +6,7 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 15:32:02 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/17 12:29:58 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/18 19:50:37 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,26 @@ t_format	*init_format(void)
 	return (format);
 }
 
-int			fill_flag(char *fmt, char **flag)
+int			fill_flag(const char **fmt, char **flag)
 {
-	int	count;
-
-	count = 0;
-	if (*fmt == '*')
+	if (**fmt == '*')
 	{
 		if (!(p_addchr(flag, '*')))
 			return (0);
-		return (++count);
+		return (1);
 	}
-	while (*fmt >= '0' && *fmt <= '9')
+	while (**fmt >= '0' && **fmt <= '9')
 	{
-		if (!(p_addchr(flag, *fmt)))
+		if (!(p_addchr(flag, **fmt)))
 			return (0);
-		fmt++;
-		count++;
+		(*fmt)++;
 	}
-	if (*fmt == '*')
+	if (**fmt == '*')
 		return (0);
-	return (count);
+	return (1);
 }
 
-t_format	*setformat(char *fmt)
+t_format	*setformat(const char **fmt)
 {
 	t_format		*format;
 	int				i;
@@ -61,25 +57,25 @@ t_format	*setformat(char *fmt)
 	if (!(format = init_format()))//Puedes intentar quitar el return 0 en este caso y proteger las funciones que emplean format(con proteger la primera bastaria)
 		return (0);
 	i = 0;
-	while (!ft_strchr("cspdiuxX%", *fmt) && *fmt)
+	while (!ft_strchr("cspdiuxX%", **fmt) && **fmt)
 	{
-		if (!ft_strchr("-0.*123456789", *fmt))
+		if (!ft_strchr("-0.*123456789", **fmt))
 			return (0);
-		if (ft_strchr("0-", *fmt) && !i)
+		if (ft_strchr("0-", **fmt) && !i)
 		{
-			if (!(p_addchr(&format->flags[0], *fmt)))
+			if (!(p_addchr(&format->flags[0], **fmt)))
 				return (0);
 		}
-		if (ft_strchr(".123456789*", *fmt) && i++ < 3)
+		else if (ft_strchr(".123456789*", **fmt) && i < 3)
 		{
-			if (*(fmt++) = '.')//probablemente tengas que incluir esto en la funcion fill_flag()
+			if (*((*fmt)++) == '.')//probablemente tengas que incluir esto en la funcion fill_flag()
 				i++;
-			if (!(fill_flag(fmt, &format->flags[i++])))//Guarda el valor que le corresponde a width o precision, cuidado con los *, no pueden estar detras de un numero
+			if (!(fill_flag(fmt, &format->flags[++i])))
 				return (0);
 		}
-		fmt++;
+		(*fmt)++;
 	}
-	format->specifier = *fmt;//puede llegar a guardar el valor '/0' en este caso deberiamos devolver error mas adelante al intentar leer el tipo
+	format->specifier = **fmt;
 	return (format);
 }
 
@@ -95,16 +91,21 @@ int			ft_printf(const char *fmt, ...)
 	count = 0;
 	while (*fmt)
 	{
-		//Detecta siempre los %, no esta implementado que sean escapados
 		if (*fmt == '%')
 		{
-			format = setformat(fmt);
+			fmt++;
+			format = setformat(&(fmt));
 			count += ft_putformat(format, ap_copy);
+			fmt++;
 		}
-		ft_putchar_fd(*fmt, 1);
-		count++;
-		fmt++;
+		else
+		{
+			ft_putchar_fd(*fmt, 1);
+			count++;
+			fmt++;
+		}
 	}
+	va_end(ap_copy);
 	va_end(ap);
 	return (count);
 }
