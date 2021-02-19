@@ -6,14 +6,14 @@
 #    By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/16 10:46:13 by mmunoz-f          #+#    #+#              #
-#    Updated: 2021/02/18 19:35:50 by mmunoz-f         ###   ########.fr        #
+#    Updated: 2021/02/19 18:55:06 by mmunoz-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra
 NAME = libftprintf.a
-SOURCE = ft_printf.c ft_putformat.c p_utils.c
+SOURCE = ft_printf.c ft_putformat.c ft_printf_utils.c
 OBJS_SRC = $(SOURCE:.c=.o)
 LIBFTPATH = ./libft
 LIBFTA = libft/libft.a

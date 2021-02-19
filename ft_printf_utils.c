@@ -6,7 +6,7 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 18:13:30 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/18 18:53:35 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:54:45 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,17 @@ char				*ft_ptrtostr(long unsigned int n, char *base)
 
 	type = ft_strlen(base);
 	length = ft_unslength(n, type);
-	if (!(str = (char *)malloc(length + 1)))
+	if (!(str = (char *)malloc(length + 3)))
 		return (0);
-	str[length] = 0;
+	str[length + 2] = 0;
 	if (n == 0)
-		str[--length] = '0';
+		str[--length + 2] = '0';
 	while (n)
 	{
-		str[--length] = base[n % type];
+		str[--length + 2] = base[n % type];
 		n /= type;
 	}
+	str[0] = '0';
+	str[1] = 'x';
 	return (str);
 }
