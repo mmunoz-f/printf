@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   p_utils.c                                          :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 18:13:30 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/19 18:54:45 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/20 19:22:10 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int					p_addchr(char **s, char c)
+int					p_addchr(char **s, char c, unsigned int len, int backw)
 {
-	char	new[2];
+	char	new[len + 1];
 	char	*temp;
 
-	new[0] = c;
-	new[1] = 0;
+	new[len] = 0;
+	while (len--)
+		new[len] = c;
 	temp = *s;
-	if (!(*s = ft_strjoin(*s, new)))
-		return (0);
+	if (!backw)
+	{
+		if (!(*s = ft_strjoin(*s, new)))
+			return (0);
+	}
+	else
+	{
+		if (!(*s = ft_strjoin(new, *s)))
+			return (0);
+	}
 	free(temp);
 	return (1);
 }

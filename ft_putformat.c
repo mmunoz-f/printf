@@ -6,16 +6,18 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 11:54:24 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/19 20:36:37 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/20 20:58:13 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		set_width(char **format, char *str, va_list ap)
+int		set_width(char **format, const char *str, va_list ap)
 {
 	char	*temp;
 
+	if (*(str - 1) == '0' && ((*(str - 2) >= '0') && *(str - 2) <= '9'))
+		return (0);
 	if (!*format)
 	{
 		if (!(*format = ft_strdup("")))
@@ -29,14 +31,14 @@ int		set_width(char **format, char *str, va_list ap)
 	}
 	else
 	{
-		if (!(*format = ft_strdup(ft_atoi(str))))
+		if (!(*format = ft_itoa(ft_atoi(str))))
 			return (0);
 	}
 	free(temp);
 	return (1);
 }
 
-int		set_precision(char **format, char *str, va_list ap)
+int		set_precision(char **format, const char *str, va_list ap)
 {
 	char	*temp;
 
@@ -53,19 +55,23 @@ int		set_precision(char **format, char *str, va_list ap)
 	}
 	else
 	{
-		if (!(*format = ft_strdup(ft_atoi(str))))
+		if (!(*format = ft_itoa(ft_atoi(str))))
 			return (0);
 	}
 	free(temp);
 	return (1);
 }
 
-int		set_length(char **format, char *str)
+int		set_length(char **format, const char *str)
 {
 	if (!*format)
 	{
 		if (!(*format = ft_strdup("")))
 			return (0);
+	}
+	if (ft_strchr("", *str))
+	{
+		return (0);
 	}
 	return (1);
 }
@@ -89,20 +95,18 @@ char	*start_str(char specifier, va_list ap)
 	else if (specifier == '%')
 		return (ft_chartostr('%'));
 	else
-		return (0);
+		return (ft_strdup(""));
 }
 
 int		ft_putformat(t_format *format, va_list ap)
 {
 	char			*str;
-	char			*temp;
-	unsigned int	i;
 
-	if (!(str = start_str(format->specifier, ap)))
-		return (0);
-	if (ft_strchar(format->flags[0], '-'))
-		minus_flag_format(str, format);
-	else if (ft_strchr(format->flags[0], '0'))
-		zero_flag_format(str, format);
+	str = start_str(format->specifier, ap);
+	if (format->flags[2])
+		format_precision(&str, format);
+	printf("\n%s\n", format->flags[1]);
+	format_width(&str, format);
+	free(str);
 	return (ft_putstr_fd(str, 1));
 }
