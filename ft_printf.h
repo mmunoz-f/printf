@@ -6,7 +6,7 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 15:34:07 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/20 19:38:28 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/21 17:24:03 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ int				set_flag(char **format, char flag);
 
 void			format_precision(char **str, t_format *format);
 
-void			format_width(char **str, t_format *format);
+unsigned int	format_width(char **str, t_format *format);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/16 10:46:13 by mmunoz-f          #+#    #+#              #
-#    Updated: 2021/02/20 19:43:13 by mmunoz-f         ###   ########.fr        #
+#    Updated: 2021/02/21 15:55:47 by mmunoz-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ LIBFTA = libft/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJS_SRC) lm
-	ar -cr $(NAME) $(OBJS_SRC)
+	ar -cr $(NAME) $(OBJS_SRC) libft/*.o
 
 lm:
 	make -C $(LIBFTPATH)

@@ -6,7 +6,7 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 11:54:24 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/20 20:58:13 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/21 17:53:47 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		set_precision(char **format, const char *str, va_list ap)
 
 	if (!*format)
 	{
-		if (!(*format = ft_strdup("")))
+		if (!(*format = ft_strdup("0")))
 			return (0);
 	}
 	temp = *format;
@@ -101,12 +101,24 @@ char	*start_str(char specifier, va_list ap)
 int		ft_putformat(t_format *format, va_list ap)
 {
 	char			*str;
+	char			*temp;
+	unsigned int	count;
 
 	str = start_str(format->specifier, ap);
+	if (format->specifier == 's')
+	{
+		if (str == 0)
+			str = ft_strdup("(null)");
+	}
 	if (format->flags[2])
 		format_precision(&str, format);
-	printf("\n%s\n", format->flags[1]);
-	format_width(&str, format);
+	if (format->specifier == 'p')
+	{
+		temp = str;
+		str = ft_strjoin("0x", str);
+		free(temp);
+	}
+	count = format_width(&str, format);
 	free(str);
-	return (ft_putstr_fd(str, 1));
+	return (count);
 }
