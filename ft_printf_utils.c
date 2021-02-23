@@ -6,11 +6,31 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/16 18:13:30 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/21 17:21:42 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/23 15:18:31 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+void				destroy(t_format *format)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (format)
+	{
+		while (i < 4)
+		{
+			if (format->flags[i])
+			{
+				free(format->flags[i]);
+				format->flags[i] = 0;
+			}
+			i++;
+		}
+		free(format);
+	}
+}
 
 int					p_addchr(char **s, char c, unsigned int len, int backw)
 {
@@ -59,26 +79,7 @@ long unsigned int	ft_unslength(long unsigned int n, int base)
 	return (i);
 }
 
-char				*ft_lunsigned_itoa(long unsigned int n)
-{
-	char				*str;
-	long unsigned int	size;
-
-	size = ft_unslength(n, 10);
-	if (!(str = (char *)malloc(size + 1)))
-		return (0);
-	str[size] = 0;
-	if (n == 0)
-		str[--size] = '0';
-	while (n)
-	{
-		str[--size] = n % 10 + 48;
-		n /= 10;
-	}
-	return (str);
-}
-
-char				*ft_ptrtostr(long unsigned int n, char *base)
+char				*ft_lu_itoab(long unsigned int n, char *base)
 {
 	char				*str;
 	unsigned int		type;

@@ -6,7 +6,7 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 15:34:07 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/22 19:22:26 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/23 15:18:53 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int				p_addchr(char **s, char c, unsigned int len, int backw);
 
 char			*ft_chartostr(char c);
 
-char			*ft_lunsigned_itoa(long unsigned int n);
-
-char			*ft_ptrtostr(long unsigned int n, char *base);
+char			*ft_lu_itoab(long unsigned int n, char *base);
 
 t_format		*init_format(void);
+
+void			destroy(t_format *format);
 
 int				set_width(char **format, const char *str, va_list ap);
 

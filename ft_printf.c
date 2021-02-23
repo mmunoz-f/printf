@@ -6,30 +6,23 @@
 /*   By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 15:32:02 by mmunoz-f          #+#    #+#             */
-/*   Updated: 2021/02/22 20:15:27 by mmunoz-f         ###   ########.fr       */
+/*   Updated: 2021/02/23 18:11:56 by mmunoz-f         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void		destroy(t_format *format)
+void		neg_width(t_format *format)
 {
-	unsigned int	i;
+	char	*temp;
 
-	i = 0;
-	if (format)
-	{
-		while (i < 4)
-		{
-			if (format->flags[i])
-			{
-				free(format->flags[i]);
-				format->flags[i] = 0;
-			}
-			i++;
-		}
-		free(format);
-	}
+	temp = format->flags[1];
+	format->flags[1] = ft_strdup(format->flags[1] + 1);
+	free(temp);
+	if (!format->flags[0])
+		format->flags[0] = ft_strdup("");
+	if (!(ft_strchr(format->flags[0], '-')))
+		p_addchr(&(format->flags[0]), '-', 1, 0);
 }
 
 char		*start_str(char specifier, va_list ap)
@@ -39,15 +32,15 @@ char		*start_str(char specifier, va_list ap)
 	else if (specifier == 's')
 		return (ft_strdup(va_arg(ap, char *)));
 	else if (specifier == 'p')
-		return (ft_ptrtostr(va_arg(ap, long unsigned int), "0123456789abcdef"));
+		return (ft_lu_itoab(va_arg(ap, long unsigned int), "0123456789abcdef"));
 	else if (specifier == 'i' || specifier == 'd')
 		return (ft_itoa(va_arg(ap, int)));
 	else if (specifier == 'u')
-		return (ft_lunsigned_itoa((long unsigned int)va_arg(ap, unsigned int)));
+		return (ft_lu_itoab(va_arg(ap, unsigned int), "0123456789"));
 	else if (specifier == 'x')
-		return (ft_itoa_base(va_arg(ap, int), "0123456789abcdef"));
+		return (ft_lu_itoab(va_arg(ap, unsigned int), "0123456789abcdef"));
 	else if (specifier == 'X')
-		return (ft_itoa_base(va_arg(ap, int), "0123456789ABCDEF"));
+		return (ft_lu_itoab(va_arg(ap, unsigned int), "0123456789ABCDEF"));
 	else if (specifier == '%')
 		return (ft_chartostr('%'));
 	else
@@ -60,6 +53,11 @@ int			ft_putformat(t_format *format, va_list ap)
 	unsigned int	count;
 
 	count = 0;
+	if (format->flags[1])
+	{
+		if (ft_atoi(format->flags[1]) < 0)
+			neg_width(format);
+	}
 	str = start_str(format->specifier, ap);
 	if (format->specifier == 's')
 		count = ft_printf_string(format, &str);
@@ -115,7 +113,8 @@ int			ft_printf(const char *fmt, ...)
 		if (*fmt == '%')
 		{
 			fmt++;
-			format = setformat(&(fmt), ap);
+			if (!(format = setformat(&(fmt), ap)))
+				return (-1);
 			count += ft_putformat(format, ap);
 			destroy(format);
 		}
