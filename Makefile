@@ -6,7 +6,7 @@
 #    By: mmunoz-f <mmunoz-f@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/16 10:46:13 by mmunoz-f          #+#    #+#              #
-#    Updated: 2021/02/23 17:11:00 by mmunoz-f         ###   ########.fr        #
+#    Updated: 2022/01/11 19:14:09 by mmunoz-f         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,6 @@ $(NAME): $(OBJS_SRC) lm
 lm:
 	make -C $(LIBFTPATH)
 
-p: $(NAME) $(OBJS_SRC)
-	$(CC) $(CFLAGS) -o prueba main.c $(LIBFTA) $(NAME)
-
 clean:
 	rm -f *.o
 	make fclean -C $(LIBFTPATH)
@@ -40,4 +37,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all p lm clean fclean re
+.PHONY: all lm clean fclean re
