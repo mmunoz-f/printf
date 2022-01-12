@@ -9,3 +9,5 @@ Compile the library by using `make`, it will generate a '.a' file, then you can 
 ```bash
 gcc main.c -L. -lftprintf
 ```
+
+After the -L flag you are supposed to add the path to the static library file (the .a file), in the example above the static library, is located on the root.
